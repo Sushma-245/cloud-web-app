@@ -1,0 +1,27 @@
+name: Deploy Web Application to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: SSH into EC2 and Deploy Update
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/cloud-web-app
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo pkill -f uvicorn || true
+            sudo ./venv/bin/uvicorn app:app --host 0.0.0.0 --port 80 --reload > /dev/null 2>&1 &

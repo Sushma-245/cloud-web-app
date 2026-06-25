@@ -24,5 +24,5 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
             sudo fuser -k 80/tcp || true
-            echo "--- STARTING LIVE DIAGNOSTIC RUN ---"
-            timeout 5 sudo ./venv/bin/uvicorn app:app --host 0.0.0.0 --port 80 || true
+            screen -X -S fastapi quit || true
+            screen -dmS fastapi sudo ./venv/bin/uvicorn app:app --host 0.0.0.0 --port 80 --reload

@@ -24,4 +24,4 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
             sudo fuser -k 80/tcp || true
-            sudo ./venv/bin/uvicorn app:app --host 0.0.0.0 --port 80 --reload > /dev/null 2>&1 &
+            sudo nohup ./venv/bin/uvicorn app:app --host 0.0.0.0 --port 80 --reload > /dev/null 2>&1 &
